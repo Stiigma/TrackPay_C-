@@ -1,0 +1,544 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@100;200;300;400;500&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Bebas Neue", "Arial", sans-serif;
+    background: white;
+    color: #333;
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(180deg, rgb(60, 116, 172) 0%, rgba(84, 131, 179, 0.5) 70%, rgba(84, 131, 179, 0) 100%);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo img {
+    width: 30%;
+    text-align: center;
+}
+
+.nav {
+    padding-right: 32vh;
+}
+
+    .nav a {
+        margin: 0 15px;
+        text-decoration: none;
+        color: #000000;
+        font-weight: bold;
+        font-size: 28px;
+    }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+.profile {
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile i {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.user-profile .profile .username {
+    font-size: 40px;
+    font-weight: bold;
+    color: #000;
+}
+
+
+
+/* Sección general */
+main {
+    padding: 40px;
+}
+
+h1 {
+    font-size: 44px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    text-transform: uppercase;
+    margin: 10px 0;
+    letter-spacing: 1px;
+}
+
+.overview {
+    text-align: center;
+}
+
+.overview-cards {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+}
+
+    .card h3 {
+        font-size: 40px;
+        color: #2357c9;
+    }
+
+.filter-select {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #333;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+}
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+.value {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #0f0f0f;
+}
+
+.new-subscription {
+    margin: 20px 0;
+    text-align: right;
+}
+
+.new-btn {
+    background: #0149b4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .new-btn:hover {
+        background: #427ff0;
+    }
+
+/* Tabla de suscripciones */
+.custom-table {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+    .custom-table .header,
+    .custom-table .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        padding: 15px;
+    }
+
+    .custom-table .header {
+        background: #2a65bd;
+        color: #fff9f9;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .custom-table .row {
+        border-bottom: 2px solid #ffffff;
+        text-align: center;
+    }
+
+        .custom-table .row:last-child {
+            border-bottom: none;
+        }
+
+.actions .edit-btn,
+.actions .delete-btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.actions .edit-btn {
+    background: #0041a3;
+    color: #fff;
+}
+
+    .actions .edit-btn:hover {
+        background-color: #003080;
+    }
+
+.actions .delete-btn {
+    background: #a70404;
+    color: #fff;
+}
+
+    .actions .delete-btn:hover {
+        background-color: #800303;
+    }
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.fas.fa-cog {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Modal General */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-inner {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 600px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #427ff0;
+    color: white;
+    padding: 5px 5px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 30px;
+}
+
+    .modal-header h3 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+    .modal-close:hover {
+        color: red;
+    }
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.form-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 20px; /* Espaciado entre columnas y filas */
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.modal-buttons {
+    position: absolute;
+    bottom: 20px; /* Alineado al fondo */
+    right: 20px; /* Alineado a la derecha */
+}
+
+.btn-primary {
+    background-color: #427ff0;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+    .btn-primary:hover {
+        background-color: #0041a3;
+    }
+
+/* Configuración de las columnas */
+.config-info {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.config-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.config-left .info-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 5px;
+    width: 100%;
+}
+
+    .config-left .info-row label {
+        font-weight: bold;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .config-left .info-row .info-text {
+        background: #f8f8f8;
+        padding: 8px 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        color: #555;
+        width: 100%;
+        text-align: center;
+    }
+
+.config-right {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+    .config-right .info-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+        .config-right .info-row label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            flex: 1;
+            text-align: right;
+        }
+
+        .config-right .info-row .info-text {
+            flex: 2;
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            color: #555;
+        }
+
+.user-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+
+    .user-avatar img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+.import-info .info-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+    .import-info .info-row label {
+        font-weight: bold;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .import-info.info-row .info-text {
+        background: #f8f8f8;
+        padding: 8px 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        color: #555;
+        width: 100%;
+        text-align: center;
+    }
+
+.config-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-btn {
+    background-color: #427ff0;
+    color: white;
+}
+
+    .edit-btn:hover {
+        background-color: #0041a3;
+    }
+
+.logout-btn {
+    background-color: #a70404;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+    .logout-btn:hover {
+        background-color: #900303;
+    }
+
+.logout-link {
+    color: white;
+    text-decoration: none;
+}
+
+    .logout-link:hover {
+        text-decoration: underline;
+    }
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #555;
+}
+
+
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #427ff0;
+}
+
+.edit-subscription-form {
+    margin-bottom: 8vh;
+}
