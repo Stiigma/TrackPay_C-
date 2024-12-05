@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     configBtn.addEventListener('click', showModal);
     closeConfigBtn.addEventListener('click', closeModal);
 
-    // Opcional: Cerrar el modal al hacer clic fuera del contenido
+    
     window.addEventListener('click', (e) => {
         if (e.target === configUser) {
             closeModal();

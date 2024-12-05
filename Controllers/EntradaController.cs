@@ -26,7 +26,7 @@ namespace TrackPay.Controllers
             var user = _context.Usuarios.FirstOrDefault(u => u.UserName == username && u.Contrasena == password);
             if (user != null)
             {
-                // Crear la identidad del usuario
+                // identidad del usuario
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
@@ -35,7 +35,7 @@ namespace TrackPay.Controllers
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                // Autenticar al usuario
+                // usuario
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 return RedirectToAction("Index", "Pagos");
