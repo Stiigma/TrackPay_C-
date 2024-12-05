@@ -1,0 +1,59 @@
+﻿@model TrackPay.Models.UsuarioRegistroVista
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="~/css/registro.css">
+    <title>Formulario Registro</title>
+</head>
+<body>
+    <main class="registro-container">
+        <h2>Formulario Registro</h2>
+        <div class="registro-content">
+            <h4>Formulario Registro</h4>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+            <form asp-action="Registrar" asp-controller="Registrar" method="post">
+               
+                <div class="input-field">
+                    <label for="UserName">Nombre de Usuario</label>
+                    <input type="text" id="UserName" name="UserName" value="@Model.UserName" class="form-control" required />
+                </div>
+                <div class="input-field">
+                    <label for="Nombre_com">Nombre Completo</label>
+                    <input type="text" id="Nombre_com" name="Nombre_com" value="@Model.Nombre_com" class="form-control" required />
+                </div>
+                <div class="input-field">
+                    <label for="CorreoElectronico">Correo Electrónico</label>
+                    <input type="email" id="CorreoElectronico" name="CorreoElectronico" value="@Model.CorreoElectronico" class="form-control" required />
+                </div>
+                <div class="input-field">
+                    <label for="Numero">Número de Teléfono</label>
+                    <input type="text" id="Numero" name="Numero" value="@Model.Numero" class="form-control" required />
+                </div>
+                <div class="input-field">
+                    <label for="Contrasena">Contraseña</label>
+                    <input type="password" id="Contrasena" name="Contrasena" class="form-control" required />
+                </div>
+                <div class="input-field">
+                    <label for="Nacionalidad">Nacionalidad</label>
+                    <input type="text" id="Nacionalidad" name="Nacionalidad" value="@Model.Nacionalidad" class="form-control" required />
+                </div>
+                <div class="input-field">
+                    <label for="FechaNa">Fecha de Nacimiento</label>
+                    <input type="date" id="FechaNa" name="FechaNa" value="@Model.FechaNa" class="form-control" required />
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="btn-primary">Registrar</button>
+                </div>
+                <a href="/Entrada/Entrada" class="already-account">¿Ya tengo Cuenta?</a>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using TrackPay.datos;
 
@@ -10,6 +11,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Agregar controladores con vistas
 builder.Services.AddControllersWithViews();
 
+// Configurar la autenticación basada en cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Entrada/Entrada"; // Ruta al Login
+        options.LogoutPath = "/Home/Logout"; // Ruta para Logout
+        options.ExpireTimeSpan = TimeSpan.FromHours(1); // Duración de la sesión
+    });
+
+// Construir la aplicación después de configurar los servicios
 var app = builder.Build();
 
 // Configurar el HTTP request pipeline
@@ -24,6 +35,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Agregar autenticación al pipeline
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -32,3 +44,4 @@ app.MapControllerRoute(
 
 // IMPORTANTE: Esto inicia la aplicación
 app.Run();
+

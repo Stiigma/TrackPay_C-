@@ -19,18 +19,18 @@
             var nodoNuevo = new Node<T>(data);
             if (cabeza == null)
             {
-                cabeza = nodoNuevo; 
+                cabeza = nodoNuevo;
                 cont++;
                 return;
             }
 
             Node<T> nodoTemp = cabeza;
-            
+
             while (nodoTemp.Sig != null)
             {
-                nodoTemp = nodoTemp.Sig; 
+                nodoTemp = nodoTemp.Sig;
             }
-            nodoTemp.Sig = nodoNuevo;            
+            nodoTemp.Sig = nodoNuevo;
             cont++;
         }
 
@@ -58,10 +58,10 @@
             if (cabeza == null)
                 throw new InvalidOperationException("La lista está vacía.");
 
-            T datoEliminado = cabeza.Dato; // Guarda el dato del nodo actual
-            cabeza = cabeza.Sig;          // Mueve la cabeza al siguiente nodo
-            cont--;                       // Reduce el contador
-            return datoEliminado;         // Retorna el dato eliminado
+            T datoEliminado = cabeza.Dato;
+            cabeza = cabeza.Sig;
+            cont--;
+            return datoEliminado;
         }
 
         public T BorrarEnIndice(int indice)
@@ -71,7 +71,7 @@
 
             if (indice == 0)
             {
-                return BorrarAlInicio(); // Usa BorrarAlInicio para el índice 0
+                return BorrarAlInicio();
             }
 
             Node<T>? nodoTemp = cabeza;
@@ -80,12 +80,12 @@
                 nodoTemp = nodoTemp?.Sig;
             }
 
-            // Nodo a eliminar
+
             var nodoAEliminar = nodoTemp.Sig;
-            T datoEliminado = nodoAEliminar.Dato; // Guarda el dato
-            nodoTemp.Sig = nodoAEliminar?.Sig;   // Reasigna el enlace
-            cont--;                              // Reduce el contador
-            return datoEliminado;                // Retorna el dato eliminado
+            T datoEliminado = nodoAEliminar.Dato;
+            nodoTemp.Sig = nodoAEliminar?.Sig;
+            cont--;
+            return datoEliminado;
         }
 
         public T BorrarAlFinal()
@@ -93,24 +93,24 @@
             if (cabeza == null)
                 throw new InvalidOperationException("La lista está vacía.");
 
-            if (cabeza.Sig == null) // Si solo hay un elemento
+            if (cabeza.Sig == null)
             {
-                T datoEliminado = cabeza.Dato; // Guarda el dato
-                cabeza = null;                 // La lista queda vacía
+                T datoEliminado = cabeza.Dato;
+                cabeza = null;
                 cont--;
-                return datoEliminado;          // Retorna el dato eliminado
+                return datoEliminado;
             }
 
             Node<T>? nodoTemp = cabeza;
-            while (nodoTemp?.Sig?.Sig != null) // Encuentra el penúltimo nodo
+            while (nodoTemp?.Sig?.Sig != null)
             {
                 nodoTemp = nodoTemp?.Sig;
             }
 
-            T datoEliminadoFinal = nodoTemp.Sig.Dato; // Guarda el dato del último nodo
-            nodoTemp.Sig = null;                     // Elimina el último nodo
+            T datoEliminadoFinal = nodoTemp.Sig.Dato;
+            nodoTemp.Sig = null;
             cont--;
-            return datoEliminadoFinal;               // Retorna el dato eliminado
+            return datoEliminadoFinal;
         }
 
         public T Borrar(T data)
@@ -118,7 +118,7 @@
             if (cabeza == null)
                 throw new InvalidOperationException("La lista está vacía.");
 
-            // Si el elemento a borrar está al inicio
+
             if (cabeza.Dato.Equals(data))
             {
                 T datoEliminado = cabeza.Dato;

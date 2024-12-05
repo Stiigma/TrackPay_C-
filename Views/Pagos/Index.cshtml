@@ -1,5 +1,6 @@
 ﻿@using TrackPay.DataStructures
-@model ColaConPrioridad<TrackPay.Models.Pago>
+@model TrackPay.Models.PagosVista
+
 
 
 <!DOCTYPE html>
@@ -23,7 +24,7 @@
         <div class="user-profile">
             <img src="/img/fotoperfil.jpg" alt="Usuario" class="profile-pic">
             <div class="profile">
-                <span class="username">Usuario por defecto</span>
+                <span class="username">@Model.Usuario.UserName</span>
             </div>
             <i class="fas fa-cog" id="config-btn"></i>
         </div>
@@ -44,30 +45,30 @@
                         <div class="import-info">
                             <div class="info-row">
                                 <label>Usuario:</label>
-                                <div class="info-text">Usuario por defecto</div>
+                                <div class="info-text">@Model.Usuario.UserName</div>
                             </div>
                             <div class="info-row">
                                 <label>Nombre Completo:</label>
-                                <div class="info-text">Nombre por defecto</div>
+                                <div class="info-text">@Model.Usuario.Nombre_com</div>
                             </div>
                         </div>
                     </div>
                     <div class="config-right">
                         <div class="info-row">
                             <label>Número de Celular:</label>
-                            <div class="info-text">+00 000 000 0000</div>
+                            <div class="info-text">@Model.Usuario.Numero</div>
                         </div>
                         <div class="info-row">
                             <label>Correo:</label>
-                            <div class="info-text">correo@ejemplo.com</div>
+                            <div class="info-text">@Model.Usuario.CorreoElectronico</div>
                         </div>
                         <div class="info-row">
                             <label>Nacionalidad:</label>
-                            <div class="info-text">Desconocido</div>
+                            <div class="info-text">@Model.Usuario.Nacionalidad</div>
                         </div>
                         <div class="info-row">
                             <label>Total de Pagos Activos:</label>
-                            <div class="info-text">0</div>
+                            <div class="info-text">@Model.Pagos.Count()</div>
                         </div>
                     </div>
                 </div>
@@ -81,28 +82,85 @@
         </div>
     </header>
 
+    <!-- Modal de Edición de Suscripción -->
+    <div id="edit-subscription-modal" class="modal">
+        <div class="modal-inner">
+            <div class="modal-header">
+                <h3>Editar Suscripción</h3>
+                <button class="modal-close" id="close-edit-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="edit-subscription-form">
+                    <div class="form-columns">
+                        <div class="form-group">
+                            <label for="subscription-name">Nombre</label>
+                            <input type="text" id="subscription-name" name="subscription-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subscription-date">Fecha de Vencimiento</label>
+                            <input type="date" id="subscription-date" name="subscription-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subscription-temporality">Temporalidad</label>
+                            <select id="subscription-temporality" name="subscription-temporality" required>
+                                <option value="mensual">Mensual</option>
+                                <option value="anual">Anual</option>
+                                <option value="semanal">Semanal</option>
+                                <option value="Ninguna">Ninguna</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subscription-type">Tipo</label>
+                            <select id="subscription-type" name="subscription-type" required>
+                                <option value="entretenimiento">Entretenimiento</option>
+                                <option value="salud">Salud</option>
+                                <option value="bancaria">Bancaria</option>
+                                <option value="servicio">Servicio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="subscription-amount">Cantidad</label>
+                            <input type="number" id="subscription-amount" name="subscription-amount">
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-buttons">
+                    <button id="save-changes-btn" class="btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contenido Principal -->
     <main>
         <!-- Resumen -->
+        
         <section class="overview">
             <h1>Suscripciones</h1>
             <img src="/img/logo.png" alt="Logo">
             <div class="overview-cards">
                 <div class="card">
                     <h3>Valor por mes</h3>
-                    <a class="value">$0.00</a>
+                    <a class="value">@Model.SumatoriaMensual</a>
                 </div>
                 <div class="card">
                     <h3>Fecha más próxima</h3>
-                    <div class="value">No definida</div>
+                    @if(!Model.Pagos.EsVacia())
+                    {
+                        var pagoPrioritario = Model.Pagos.Peek();
+                        <div class="value">@pagoPrioritario.Concepto - @pagoPrioritario.FechaVencimiento.ToString("dd/MM/yyyy")</div>
+                    }                    
                 </div>
                 <div class="card">
                     <h3>Filtración</h3>
-                    <select id="filter-select" class="filter-select">
-                        <option value="todos">Todos</option>
-                        <option value="pagos_unicos">Pago único</option>
-                        <option value="pagos_recurrentes">Pago recurrente</option>
-                    </select>
+                    <form method="get" action="/Pagos/Index">
+                        <select name="tipoPago" id="filter-select" class="filter-select">
+                            <option value="-1">Todos</option>
+                            <option value="0">Pago único</option>
+                            <option value="1">Pago recurrente</option>
+                        </select>
+                        <button type="submit">Aplicar Filtro</button>
+                    </form>
                 </div>
             </div>
         </section>
@@ -122,22 +180,22 @@
                     </div>
 
                     <!-- Formulario para Pago Único -->
-                    <form id="payUnitForm" method="POST" class="form hidden">
+                    <form id="payUnitForm" asp-action="FormPagoUnico" asp-controller="Pagos" method="post" class="form hidden">
 
                         <div class="form-group">
                             <label for="concepto">Concepto:</label>
                             <input type="text"
                                    id="concepto"
-                                   name="concepto"
+                                   name="Concepto"
                                    class="controls"
                                    placeholder="Concepto del pago"
                                    required>
                         </div>
                         <div class="form-group">
-                            <label for="fecha">Fecha a pagar:</label>
+                            <label for="fecha_fin">Fecha a pagar:</label>
                             <input type="date"
                                    id="fecha"
-                                   name="fecha"
+                                   name="fecha_fin"
                                    class="controls"
                                    required>
                         </div>
@@ -145,7 +203,7 @@
                             <label for="monto">Monto:</label>
                             <input type="text"
                                    id="monto"
-                                   name="monto"
+                                   name="Monto"
                                    class="controls"
                                    placeholder="monto"
                                    required>
@@ -154,43 +212,46 @@
                             <label for="hora">Hora de aviso:</label>
                             <input type="time"
                                    id="hora"
-                                   name="hora"
+                                   name="Hora"
                                    class="controls"
                                    required>
                         </div>
                         <div class="form-group">
                             <label for="prioridad">Prioridad:</label>
                             <select id="prioridad"
-                                    name="prioridad"
+                                    name="Prioridad"
                                     class="controls"
                                     required>
-                                <option value="1">Importante - Urgente</option>
-                                <option value="2">Importante - No Urgente</option>
-                                <option value="3">No Importante - Urgente</option>
-                                <option value="4">No Importante - No Urgente</option>
+                                <option value="0">Importante - Urgente</option>
+                                <option value="1">Importante - No Urgente</option>
+                                <option value="2">No Importante - Urgente</option>
+                                <option value="3">No Importante - No Urgente</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="tipo">Tipo:</label>
-                            <input type="text"
-                                   id="tipo"
-                                   name="tipo"
-                                   class="controls"
-                                   placeholder="Ejemplo: único"
-                                   required>
+                            <select id="tipo"
+                                    name="Tipo"
+                                    class="controls"
+                                    required>
+                                <option value="0">Bancario</option>
+                                <option value="1">Entretenimiento</option>
+                                <option value="2">Salud</option>
+                                <option value="3">Servicio</option>
+                            </select>
                         </div>
                         <button type="button" id="switch-to-recurrent" class="btn-secondary">Cambiar a Pago Recurrente</button>
                         <button type="submit" class="btn-primary">Guardar Pago Único</button>
                     </form>
 
                     <!-- Formulario para Pago Recurrente -->
-                    <form id="payReqForm" method="POST" class="form hidden">
+                    <form id="payReqForm" asp-action="GuardarPagoRecurrente" asp-controller="Pagos" method="post" class="form hidden">
 
                         <div class="form-group">
                             <label for="concepto">Nombre del pago:</label>
                             <input type="text"
                                    id="concepto"
-                                   name="concepto"
+                                   name="Concepto"
                                    class="controls"
                                    placeholder="Nombre del pago"
                                    required>
@@ -198,18 +259,18 @@
                         <div class="form-group">
                             <label for="frecuencia">Frecuencia:</label>
                             <select id="frecuencia"
-                                    name="frecuencia"
+                                    name="Frecuencia"
                                     class="controls"
                                     required>
-                                <option value="diario">Diario</option>
-                                <option value="semanal">Semanal</option>
-                                <option value="mensual">Mensual</option>
+                                <option value="0">Diario</option>
+                                <option value="1">Semanal</option>
+                                <option value="2">Mensual</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="monto">Monto</label>
                             <input type="text"
-                                   id="monto"
+                                   id="Monto"
                                    name="monto"
                                    class="controls"
                                    placeholder="monto"
@@ -217,40 +278,35 @@
                         </div>
                         <div class="form-group">
                             <label for="fecha_fin">Fecha a pagar:</label>
-                            <input type="date"
-                                   id="fecha_fin"
-                                   name="fecha_fin"
-                                   class="controls"
-                                   required>
+                            <input type="date" id="fecha_fin" name="fecha_fin" class="controls" required>
                         </div>
                         <div class="form-group">
                             <label for="hora">Hora de aviso:</label>
-                            <input type="time"
-                                   id="hora"
-                                   name="hora"
-                                   class="controls"
-                                   required>
+                            <input type="time" id="hora" name="Hora" class="controls" required>
                         </div>
                         <div class="form-group">
                             <label for="prioridad">Prioridad:</label>
                             <select id="prioridad"
-                                    name="prioridad"
+                                    name="Prioridad"
                                     class="controls"
                                     required>
-                                <option value="1">Importante - Urgente</option>
-                                <option value="2">Importante - No Urgente</option>
-                                <option value="3">No Importante - Urgente</option>
-                                <option value="4">No Importante - No Urgente</option>
+                                <option value="0">Importante - Urgente</option>
+                                <option value="1">Importante - No Urgente</option>
+                                <option value="2">No Importante - Urgente</option>
+                                <option value="3">No Importante - No Urgente</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="tipo">Tipo:</label>
-                            <input type="text"
-                                   id="tipo"
-                                   name="tipo"
-                                   class="controls"
-                                   placeholder="Ejemplo: recurrente"
-                                   required>
+                            <select id="tipo"
+                                    name="Tipo"
+                                    class="controls"
+                                    required>
+                                <option value="0">Bancario</option>
+                                <option value="1">Entretenimiento</option>
+                                <option value="2">Salud</option>
+                                <option value="3">Servicio</option>
+                            </select>
                         </div>
                         <button type="button" id="switch-to-unit" class="btn-secondary">Cambiar a Pago Único</button>
                         <button type="submit" class="btn-primary">Guardar Pago Recurrente</button>
@@ -271,7 +327,7 @@
 
                 <!-- Filas dinámicas generadas con Razor -->
                 <div id="lista-pagos">
-                    @if (Model.EsVacia())
+                    @if (Model.Pagos.EsVacia())
                     {
                         <div class="row">
                             <div colspan="6">No hay pagos activos.</div>
@@ -279,9 +335,9 @@
                     }
                     else
                     {
-                        while (!Model.EsVacia())
+                        while (!Model.Pagos.EsVacia())
                         {
-                            var pago = Model.Dequeue();
+                            var pago = Model.Pagos.Dequeue();
                             <div class="pago-item" id="@pago.Id">
                                 <div class="row">
                                     <div>@pago.Concepto</div>
@@ -305,4 +361,3 @@
 
 </body>
 </html>
-

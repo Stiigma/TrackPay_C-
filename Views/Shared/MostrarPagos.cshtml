@@ -1,7 +1,5 @@
-﻿
-@using TrackPay.DataStructures
-@model ColaConPrioridad<TrackPay.Models.Pago> 
-
+﻿@using TrackPay.DataStructures
+@model ColaConPrioridad<TrackPay.Models.Pago>
 
 
 <!DOCTYPE html>
@@ -115,6 +113,151 @@
                 <button class="new-btn" id="add-btn"><i class="fas fa-plus"></i> Nuevo</button>
             </div>
 
+            <!-- Modal Agregar -->
+            <div id="add-modal" class="modal hidden">
+                <div class="modal-inner">
+                    <div class="modal-header">
+                        <h3>Nuevo Pago</h3>
+                        <button class="modal-close" id="close-add-modal">&times;</button>
+                    </div>
+
+                    <!-- Formulario para Pago Único -->
+                    <form id="payUnitForm" method="POST" class="form hidden">
+                        
+                        <div class="form-group">
+                            <label for="concepto">Concepto:</label>
+                            <input type="text"
+                                   id="concepto"
+                                   name="concepto"
+                                   class="controls"
+                                   placeholder="Concepto del pago"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha">Fecha a pagar:</label>
+                            <input type="date"
+                                   id="fecha"
+                                   name="fecha"
+                                   class="controls"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="monto">Monto:</label>
+                            <input type="text"
+                                   id="monto"
+                                   name="monto"
+                                   class="controls"
+                                   placeholder="monto"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora">Hora de aviso:</label>
+                            <input type="time"
+                                   id="hora"
+                                   name="hora"
+                                   class="controls"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prioridad">Prioridad:</label>
+                            <select id="prioridad"
+                                    name="prioridad"
+                                    class="controls"
+                                    required>
+                                <option value="1">Importante - Urgente</option>
+                                <option value="2">Importante - No Urgente</option>
+                                <option value="3">No Importante - Urgente</option>
+                                <option value="4">No Importante - No Urgente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo">Tipo:</label>
+                            <input type="text"
+                                   id="tipo"
+                                   name="tipo"
+                                   class="controls"
+                                   placeholder="Ejemplo: único"
+                                   required>
+                        </div>
+                        <button type="button" id="switch-to-recurrent" class="btn-secondary">Cambiar a Pago Recurrente</button>
+                        <button type="submit" class="btn-primary">Guardar Pago Único</button>
+                    </form>
+
+                    <!-- Formulario para Pago Recurrente -->
+                    <form id="payReqForm" method="POST" class="form hidden">
+                        
+                        <div class="form-group">
+                            <label for="concepto">Nombre del pago:</label>
+                            <input type="text"
+                                   id="concepto"
+                                   name="concepto"
+                                   class="controls"
+                                   placeholder="Nombre del pago"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="frecuencia">Frecuencia:</label>
+                            <select id="frecuencia"
+                                    name="frecuencia"
+                                    class="controls"
+                                    required>
+                                <option value="diario">Diario</option>
+                                <option value="semanal">Semanal</option>
+                                <option value="mensual">Mensual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="monto">Monto</label>
+                            <input type="text"
+                                   id="monto"
+                                   name="monto"
+                                   class="controls"
+                                   placeholder="monto"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha_fin">Fecha a pagar:</label>
+                            <input type="date"
+                                   id="fecha_fin"
+                                   name="fecha_fin"
+                                   class="controls"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora">Hora de aviso:</label>
+                            <input type="time"
+                                   id="hora"
+                                   name="hora"
+                                   class="controls"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prioridad">Prioridad:</label>
+                            <select id="prioridad"
+                                    name="prioridad"
+                                    class="controls"
+                                    required>
+                                <option value="1">Importante - Urgente</option>
+                                <option value="2">Importante - No Urgente</option>
+                                <option value="3">No Importante - Urgente</option>
+                                <option value="4">No Importante - No Urgente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo">Tipo:</label>
+                            <input type="text"
+                                   id="tipo"
+                                   name="tipo"
+                                   class="controls"
+                                   placeholder="Ejemplo: recurrente"
+                                   required>
+                        </div>
+                        <button type="button" id="switch-to-unit" class="btn-secondary">Cambiar a Pago Único</button>
+                        <button type="submit" class="btn-primary">Guardar Pago Recurrente</button>
+                    </form>
+                </div>
+            </div>
+
             <div class="custom-table">
                 <!-- Encabezados de la tabla -->
                 <div class="header">
@@ -136,10 +279,22 @@
                     }
                     else
                     {
-                        while(!Model.EsVacia())
+                        while (!Model.EsVacia())
                         {
                             var pago = Model.Dequeue();
-                            <div>@pago.Concepto</div>
+                            <div class="pago-item" id="@pago.Id">
+                                <div class="row">
+                                    <div>@pago.Concepto</div>
+                                    <div>@pago.FechaVencimiento</div>
+                                    <div>@pago.Frecuencia</div>
+                                    <div>@pago.Tipo</div>
+                                    <div>@pago.Monto</div>
+                                    <div class="actions">
+                                        <button class="edit-btn" data-id="@pago.Id">Modificar</button>
+                                        <button class="delete-btn" data-id="@pago.Id">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
                         }
                     }
                 </div>
@@ -147,6 +302,6 @@
         </section>
     </main>
 
-    <script src="~/js/ste.js" asp-append-version="true"></script>
+    
 </body>
 </html>

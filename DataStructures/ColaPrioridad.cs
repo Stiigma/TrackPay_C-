@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 
 namespace TrackPay.DataStructures
 {
@@ -14,9 +13,7 @@ namespace TrackPay.DataStructures
             lista = new Lista<ElementoConPrioridad<T>>();
         }
 
-        /// <summary>
-        /// Implementación del enumerador para iterar sobre los elementos de la cola.
-        /// </summary>
+
         public IEnumerator<T> GetEnumerator()
         {
             var nodoActual = lista?.cabeza;
@@ -29,19 +26,17 @@ namespace TrackPay.DataStructures
             }
         }
 
-        /// <summary>
-        /// Implementación no genérica del enumerador requerida por IEnumerable.
-        /// </summary>
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
-        /// <summary>
-        /// Agrega un elemento a la cola con una prioridad especificada.
-        /// </summary>
         public void Enqueue(T dato, DateTime fecha, int bitPrioridad)
         {
+
+            fecha = fecha.Date;
+
             var nuevoElemento = new ElementoConPrioridad<T>(dato, fecha, bitPrioridad);
 
             if (lista.Count == 0)
@@ -53,27 +48,34 @@ namespace TrackPay.DataStructures
             Node<ElementoConPrioridad<T>>? nodoActual = lista?.cabeza;
             Node<ElementoConPrioridad<T>>? nodoPrevio = null;
 
-            // Buscar la posición correcta basada en las prioridades
+
             while (nodoActual != null)
             {
-                if (nodoActual.Dato.Fecha > fecha ||
-                   (nodoActual.Dato.Fecha == fecha && nodoActual.Dato.BitPrioridad >= bitPrioridad))
+
+                var fechaActual = nodoActual.Dato.Fecha.Date;
+
+                if (fechaActual < fecha ||
+                   (fechaActual == fecha && nodoActual.Dato.BitPrioridad < bitPrioridad))
                 {
+
                     nodoPrevio = nodoActual;
                     nodoActual = nodoActual.Sig;
                 }
                 else
                 {
+
                     break;
                 }
             }
 
             if (nodoPrevio == null)
             {
+
                 lista.InsertarAlInicio(nuevoElemento);
             }
             else
             {
+
                 lista.InsertarDespues(nodoPrevio, nuevoElemento);
             }
         }
@@ -83,10 +85,10 @@ namespace TrackPay.DataStructures
             if (lista.Count == 0)
                 throw new InvalidOperationException("La cola está vacía.");
 
-            
+
             ElementoConPrioridad<T> elemento = lista.BorrarAlInicio();
             T dato = elemento.Dato;
-            return dato;                
+            return dato;
         }
 
         public T Peek()

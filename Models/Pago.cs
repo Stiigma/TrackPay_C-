@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using TrackPay.DataStructures;
 
 namespace TrackPay.Models
 {
@@ -15,15 +14,20 @@ namespace TrackPay.Models
         public bool EsRecurrente { get; set; }
         public TipoFrecuencia Frecuencia { get; set; }
 
-        public int Prioridad { get; set; } 
+        public int Prioridad { get; set; }
 
-        // Cambiar a Enums
+
         public EstadoPago Estado { get; set; }
         public TipoPago Tipo { get; set; }
 
-        public required string RutaImagen { get; set; }
-        public required string Notas { get; set; }
+        public required string? RutaImagen { get; set; }
+        public required string? Notas { get; set; }
 
-        public required Usuario Usuario { get; set; }
+        public required Usuario? Usuario { get; set; }
+
+        public void cambiarEstado(EstadoPago nuevoEstado)
+        {
+            Estado = nuevoEstado;
+        }
     }
 }
