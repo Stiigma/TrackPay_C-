@@ -20,9 +20,10 @@
     {
         Ninguna = 0,
         Diario = 1,
-        Semanal = 2, 
-        Semestral = 3,
-        Anual = 4,
+        Semanal = 2,
+        Mensual = 3,
+        Semestral = 4,
+        Anual = 5,
     }
-    
+
 }

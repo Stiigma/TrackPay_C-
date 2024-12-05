@@ -1,13 +1,14 @@
 ﻿namespace TrackPay.DataStructures
 {
-    public class Stack<T>
+    public class Pila<T>
     {
         public Node<T>? top;
         public int cont;
 
         public int Count => cont;
 
-        public Stack() {
+        public Pila()
+        {
             top = null;
             cont = 0;
         }
@@ -18,7 +19,7 @@
         }
 
         public void Push(T dato)
-        {        
+        {
             var nodoNuevo = new Node<T>(dato);
             nodoNuevo.Sig = top;
             top = nodoNuevo;

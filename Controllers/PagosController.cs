@@ -29,12 +29,24 @@ namespace TrackPay.Controllers
             }
 
             // Obtener los pagos del usuario actual
-            var pagos = _context.Pagos.Include(p => p.Usuario).Where(p => p.Usuario.UserName == usuarioActual).ToList();
+            var pagos_validar = _context.Pagos.Include(p => p.Usuario).Where(p => p.Usuario.UserName == usuarioActual).ToList();
             var usuario = _context.Usuarios.FirstOrDefault(u => u.UserName == usuarioActual);
 
             var colaPrioridad = new ColaConPrioridad<Pago>();
             decimal sumatoriaMensual = 0;
-            foreach (var pago in pagos)
+            foreach (var pago in pagos_validar)
+            {
+                var pagoNuevo = pago.VerificarYProcesar();
+                if (pagoNuevo != null)
+                {
+                    _context.Pagos.Add(pagoNuevo);
+
+                }
+            }
+            _context.SaveChanges();
+
+            var pagos_validados = _context.Pagos.Include(p => p.Usuario).Where(p => p.Usuario.UserName == usuarioActual).ToList();
+            foreach (var pago in pagos_validados)
             {
 
                 if ((tipoPago == 0 && !pago.EsRecurrente) || (tipoPago == 1 && pago.EsRecurrente) || tipoPago == -1)
@@ -48,6 +60,7 @@ namespace TrackPay.Controllers
                         }
                     }
                 }
+
 
 
             }

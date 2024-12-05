@@ -29,5 +29,72 @@ namespace TrackPay.Models
         {
             Estado = nuevoEstado;
         }
+
+        public DateTime RenovarFecha()
+        {
+            if (Frecuencia == TipoFrecuencia.Diario)
+                return FechaVencimiento.AddDays(1);
+            else if (Frecuencia == TipoFrecuencia.Semanal)
+                return FechaVencimiento.AddDays(7);
+            else if (Frecuencia == TipoFrecuencia.Mensual)
+                return FechaVencimiento.AddMonths(1);
+            else if (Frecuencia == TipoFrecuencia.Anual)
+                return FechaVencimiento.AddYears(1);
+            else
+                throw new InvalidOperationException("Frecuencia no válida para un pago recurrente.");
+        }
+
+        public Pago ProcesarRecurrente()
+        {
+            if (!EsRecurrente)
+                throw new InvalidOperationException("Este método solo aplica a pagos recurrentes.");
+
+            // Marcar el pago actual como pagado
+            Estado = EstadoPago.Pagado;
+
+            // Crear un nuevo pago con la fecha renovada
+            return new Pago
+            {
+                UsuarioId = UsuarioId,
+                Concepto = Concepto,
+                Monto = Monto,
+                FechaVencimiento = RenovarFecha(),
+                EsRecurrente = true,
+                Frecuencia = Frecuencia,
+                Prioridad = Prioridad,
+                Estado = EstadoPago.Pendiente,
+                Tipo = Tipo,
+                RutaImagen = RutaImagen,
+                Notas = Notas,
+                Usuario = Usuario
+            };
+        }
+
+        public void ProcesarUnico()
+        {
+            if (EsRecurrente)
+                throw new InvalidOperationException("Este método solo aplica a pagos únicos.");
+
+            Estado = EstadoPago.Pagado;
+
+        }
+
+
+        public Pago? VerificarYProcesar()
+        {
+            if (FechaVencimiento <= DateTime.Now)
+            {
+                if (EsRecurrente)
+                {
+                    return ProcesarRecurrente(); // Retorna un nuevo pago para ser agregado a la base de datos
+                }
+                else
+                {
+                    ProcesarUnico(); // Marca el pago único como pagado
+                    return null; // No hay nuevo pago que agregar
+                }
+            }
+            return null; // Si no está vencido, no hacer nada
+        }
     }
 }
