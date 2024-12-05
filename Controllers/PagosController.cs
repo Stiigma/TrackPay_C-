@@ -75,7 +75,7 @@ namespace TrackPay.Controllers
             };
 
             ViewBag.TipoPago = tipoPago;
-            // Pasar la cola a la vista
+
             return View(VistaModelo);
         }
 
@@ -99,7 +99,7 @@ namespace TrackPay.Controllers
         [HttpPost("api/payments/update")]
         public IActionResult UpdatePayment([FromBody] PagoEditarVista PagoActualizado)
         {
-            // Validar si el modelo es nulo
+
             if (PagoActualizado == null)
             {
                 Console.WriteLine("El modelo recibido es nulo.");
@@ -112,12 +112,12 @@ namespace TrackPay.Controllers
                 return NotFound("No se encontró el pago.");
             }
 
-            // Asignar propiedades que coinciden directamente
+
             pago.Concepto = PagoActualizado.Concepto;
             pago.Monto = PagoActualizado.Monto;
             pago.FechaVencimiento = PagoActualizado.FechaVencimiento;
 
-            // Convertir la frecuencia de cadena a la enumeración
+
             if (Enum.TryParse(typeof(TipoFrecuencia), PagoActualizado.Frecuencia, true, out var frecuenciaEnum))
             {
                 pago.Frecuencia = (TipoFrecuencia)frecuenciaEnum;
@@ -127,7 +127,7 @@ namespace TrackPay.Controllers
                 return BadRequest("Frecuencia no válida.");
             }
 
-            // Convertir el tipo de cadena a la enumeración
+
             if (Enum.TryParse(typeof(TipoPago), PagoActualizado.Tipo, true, out var tipoEnum))
             {
                 pago.Tipo = (TipoPago)tipoEnum;
@@ -137,7 +137,7 @@ namespace TrackPay.Controllers
                 return BadRequest("Tipo de pago no válido.");
             }
 
-            // Guardar los cambios en la base de datos
+
             _context.SaveChanges();
 
             return Ok(new { message = "Pago actualizado correctamente." });
@@ -177,14 +177,14 @@ namespace TrackPay.Controllers
                 if (DateTime.TryParse(fecha_fin, out DateTime fechaParsed) &&
                     TimeSpan.TryParse(Hora, out TimeSpan horaParsed))
                 {
-                    pago.FechaVencimiento = fechaParsed.Add(horaParsed); // Combinar fecha y hora
+                    pago.FechaVencimiento = fechaParsed.Add(horaParsed);
                     Console.WriteLine($"FechaVencimiento combinada: {pago.FechaVencimiento}");
                 }
                 else
                 {
                     Console.WriteLine("Error al parsear Fecha_fin o Hora.");
                     ModelState.AddModelError("", "Fecha u hora inválidas.");
-                    return View(pago); // Retornar la vista con errores
+                    return View(pago);
                 }
 
                 pago.EsRecurrente = false;
@@ -210,7 +210,7 @@ namespace TrackPay.Controllers
                 {
                     Console.WriteLine($"Error en ModelState: {error.ErrorMessage}");
                 }
-                return View(pago); // Retorna la vista para depuración
+                return View(pago);
             }
 
 
@@ -263,7 +263,7 @@ namespace TrackPay.Controllers
         [HttpPost("api/payments/cancel")]
         public IActionResult CancelPayment([FromBody] int paymentId)
         {
-            // Buscar el pago en la base de datos
+
             var pago = _context.Pagos.FirstOrDefault(p => p.Id == paymentId);
 
             if (pago == null)

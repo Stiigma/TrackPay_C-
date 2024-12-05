@@ -52,7 +52,6 @@ namespace TrackPay.Models
             // Marcar el pago actual como pagado
             Estado = EstadoPago.Pagado;
 
-            // Crear un nuevo pago con la fecha renovada
             return new Pago
             {
                 UsuarioId = UsuarioId,
@@ -86,15 +85,15 @@ namespace TrackPay.Models
             {
                 if (EsRecurrente)
                 {
-                    return ProcesarRecurrente(); // Retorna un nuevo pago para ser agregado a la base de datos
+                    return ProcesarRecurrente();
                 }
                 else
                 {
-                    ProcesarUnico(); // Marca el pago único como pagado
-                    return null; // No hay nuevo pago que agregar
+                    ProcesarUnico();
+                    return null;
                 }
             }
-            return null; // Si no está vencido, no hacer nada
+            return null;
         }
     }
 }
